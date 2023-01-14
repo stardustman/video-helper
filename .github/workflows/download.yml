@@ -29,5 +29,5 @@ jobs:
         run: |
           mkdir -p ~/.config
           echo "refresh_token: $REFRESH_TOKEN"  >  ~/.config/aliyunpan.yaml
-          you-get --debug --output-dir "${{ github.event.inputs.upload_dir_name }}" --no-caption --playlist ${{ github.event.inputs.video_link }}
+          you-get --debug --output-dir "${{ github.event.inputs.upload_dir_name }}" --no-caption --insecure --playlist ${{ github.event.inputs.video_link }}
           aliyunpan-cli upload "${{ github.event.inputs.upload_dir_name }}"
