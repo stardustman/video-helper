@@ -1,0 +1,33 @@
+name: download-video
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_link:
+        description: "video link to download"
+        required: true
+        default: "https://www.bilibili.com/video/BV1KY411g7iA"
+      upload_dir_name:
+        description: "upload dir name "
+        required: true
+        default: "upload"
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Download And Upload
+        env:
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+        run: |
+          mkdir -p ~/.config
+          echo "refresh_token: $REFRESH_TOKEN"  >  ~/.config/aliyunpan.yaml
+          you-get --debug --output-dir "${{ github.event.inputs.upload_dir_name }}" --no-caption --playlist ${{ github.event.inputs.video_link }}
+          aliyunpan-cli upload "${{ github.event.inputs.upload_dir_name }}"
